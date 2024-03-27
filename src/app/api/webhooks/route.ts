@@ -56,37 +56,50 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
-  console.log("Webhook body:", body);
+  // console.log("Webhook body:", body);
   const parsedBody = JSON.parse(body) as WebhookEvent;
+
   if (eventType === "user.created") {
-    console.log(parsedBody.data.id)
     if (!parsedBody.data.id) {
       console.error("No user ID found in webhook payload");
       return new Response("Error occured", {
         status: 400,
       });
     }
-
-    const newUser = api.user.createUser({
+    const existingUser = await api.user.queryUser({
       clerkId: parsedBody.data.id,
     });
-
-    // Handle any errors that occur during user creation
-    // if (!newUser) {
-    //   console.error("Error creating user");
-    //   return new Response("Error occured", {
-    //     status: 500,
-    //   });
-    // }
-
-    // Do something with the newly created user
+    if (existingUser) {
+      console.error("User already exists");
+      return new Response("Error occured", {
+        status: 400,
+      });
+    }
+    const newUser = await api.user.createUser({
+      clerkId: parsedBody.data.id,
+    });
     console.log("New user created:", newUser);
   }
-  if (eventType === "user.updated") {
-    // Do something with the user updated event
-  }
   if (eventType === "user.deleted") {
-    // Do something with the user deleted event
+    if (!parsedBody.data.id) {
+      console.error("No user ID found in webhook payload");
+      return new Response("Error occured", {
+        status: 400,
+      });
+    }
+    const existingUser = await api.user.queryUser({
+      clerkId: parsedBody.data.id,
+    });
+    if (!existingUser) {
+      console.error("User does not exist");
+      return new Response("Error occured", {
+        status: 400,
+      });
+    }
+    const deletedUser = api.user.deleteUser({
+      id: existingUser.id,
+    });
+    console.log("User deleted:", deletedUser);
   }
 
   return new Response("", { status: 200 });

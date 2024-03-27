@@ -3,6 +3,19 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const userRouter = createTRPCRouter({
+  queryUser: publicProcedure
+    .input(
+      z.object({
+        clerkId: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.user.findFirst({
+        where: {
+          clerkId: input.clerkId,
+        },
+      });
+    }),
   createUser: publicProcedure
     .input(
       z.object({
@@ -30,9 +43,11 @@ export const userRouter = createTRPCRouter({
       });
     }),
 
-  privateUser: publicProcedure.query(({ ctx }) => {
-    return ctx.db.post.findFirst({
-      orderBy: { createdAt: "desc" },
-    });
-  }),
+    deleteUser: publicProcedure.input(z.object({ id: z.string().min(1) })).mutation(async ({ ctx, input }) => {
+      return ctx.db.user.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
 });

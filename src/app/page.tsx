@@ -1,4 +1,4 @@
-import { SignOutButton, SignUpButton, currentUser } from "@clerk/nextjs";
+import { SignInButton, SignOutButton, SignUpButton, currentUser } from "@clerk/nextjs";
 import Link from "next/link";
 
 import { CreatePost } from "~/app/_components/create-post";
@@ -52,6 +52,9 @@ export default async function Home() {
           <>
             <p className="text-lg">You are not signed in.</p>
             <SignUpButton mode="modal" />
+            or 
+            <SignInButton mode="modal" />
+
           </>
         )}
         <CrudShowcase />

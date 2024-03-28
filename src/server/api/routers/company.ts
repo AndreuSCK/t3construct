@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
+import { TRPCError } from "@trpc/server";
 
 export const companyRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
@@ -14,29 +19,34 @@ export const companyRouter = createTRPCRouter({
     });
   }),
 
-  createCompany: publicProcedure
+  createCompany: protectedProcedure
     .input(
       z.object({
         name: z.string().min(1),
-        title: z.string().min(1),
         description: z.string().min(1),
         location: z.string().min(1),
-
-        // company: z.object({ // Optional company object
-        //   id: z.string().uuid(), // Ensure company ID is a valid UUID
-        // }).optional(),
+        email: z.string().email(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      return ctx.db.job.create({
+      const user = await ctx.db.user.findFirst({
+        where: {
+          clerkId: ctx.auth.userId,
+        },
+      });
+      if (!user) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User not found",
+        });
+      }
+      return ctx.db.company.create({
         data: {
-          title: input.title,
+          name: input.name,
           description: input.description,
           location: input.location,
-          company: { connect: { id: "existing-company-uuid" } },
+          email: input.email,
+          createdbyUserId: user.id,
         },
       });
     }),

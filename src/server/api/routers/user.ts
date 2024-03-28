@@ -26,6 +26,7 @@ export const userRouter = createTRPCRouter({
       return ctx.db.user.create({
         data: {
           clerkId: input.clerkId,
+          
         },
       });
     }),

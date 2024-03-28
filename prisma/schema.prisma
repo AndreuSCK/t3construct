@@ -20,8 +20,37 @@ model Post {
 }
 
 model User {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  clerkId   String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  clerkId   String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  username  String?
+  company   Company[]
+}
+
+model Job {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  description String?
+  location    String?
+  phone       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  companyId   String   @db.Uuid
+  company     Company  @relation(fields: [companyId], references: [id])
+}
+
+model Company {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String   @unique
+  location        String
+  description     String?
+  companyLink     String?
+  phone           String?
+  email           String   @unique
+  labels          String[]
+  createdAt       DateTime @default(now())
+  jobs            Job[]
+  createdbyUserId String   @db.Uuid
+  createdByUser   User     @relation(fields: [createdbyUserId], references: [id])
 }

@@ -7,12 +7,12 @@
 - [CockroachDB](https://www.cockroachlabs.com/)
 
 ## How do I deploy this?
-You need these env variables set up
-DATABASE_URL
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-CLERK_SECRET_KEY
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-UPLOADTHING_SECRET
-UPLOADTHING_APP_ID
-To start it
+ You need these env variables set up
+- DATABASE_URL
+- NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+- CLERK_SECRET_KEY
+- NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+- UPLOADTHING_SECRET
+- UPLOADTHING_APP_ID
+To start it -
 npm/pnpm clone => install => prisma db push => dev

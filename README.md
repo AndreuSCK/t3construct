@@ -14,5 +14,4 @@
 - NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 - UPLOADTHING_SECRET
 - UPLOADTHING_APP_ID
-To start it -
-npm/pnpm clone => install => prisma db push => dev
+- To start it: npm/pnpm clone => install => prisma db push => dev

@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 "use client";
 import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import Autocomplete from "react-google-autocomplete";
-import { Dispatch, SetStateAction, Suspense, useState } from "react";
+import { Suspense, useState } from "react";
 import { UploadHandler } from "./uploadHandler";
 
 type Inputs = {
@@ -39,7 +41,7 @@ export const CreateCompany = ({
       setImage(undefined);
       setIsCreateOpen(false);
     },
-    onError(error, variables, context) {
+    onError(error) {
       console.error("Error creating company", error);
       setError("root.serverError", {
         message: error.message,
@@ -131,13 +133,13 @@ export const CreateCompany = ({
             className="w-full rounded border px-3 py-1 shadow"
             apiKey={googleApi}
             onPlaceSelected={(place) => {
-              if (place && place.formatted_address) {
+              if (place?.formatted_address) {
                 setAddress(place.formatted_address);
-              } else if (place && place.name) {
+              } else if (place?.name) {
                 setAddress(place.name);
               }
             }}
-            onInput={(e) => {
+            onInput={() => {
               clearErrors("address");
             }}
             options={{

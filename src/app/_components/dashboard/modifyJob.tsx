@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import Autocomplete from "react-google-autocomplete";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { api } from "~/trpc/react";
 import type { inferRouterOutputs } from "@trpc/server";
 import { type companyRouter } from "~/server/api/routers/company";
@@ -43,7 +46,7 @@ export const ModifyJob = ({
       refetchJobs();
       reset();
     },
-    onError(error, variables, context) {
+    onError(error) {
       console.error("Error editing the job", error);
       setError("root.serverError", {
         message: error.message,
@@ -54,7 +57,7 @@ export const ModifyJob = ({
     modifyJob.mutate({
       title: data.title,
       description: data.description,
-      location: data.location || company.location,
+      location: address || company.location,
       companyId: job.id,
       jobUrl: data.jobUrl,
     });
@@ -62,9 +65,9 @@ export const ModifyJob = ({
   const populateForm = () => {
     reset({
       title: job.title,
-      description: job.description || undefined,
-      location: job.location || undefined,
-      jobUrl: job.jobUrl || undefined,
+      description: job.description ?? undefined,
+      location: job.location ?? undefined,
+      jobUrl: job.jobUrl ?? undefined,
     });
   };
   const deleteJob = api.job.deleteJob.useMutation({
@@ -142,13 +145,13 @@ export const ModifyJob = ({
               className="w-full rounded border px-3 py-1 shadow"
               apiKey={googleApi}
               onPlaceSelected={(place) => {
-                if (place && place.formatted_address) {
+                if (place?.formatted_address) {
                   setAddress(place.formatted_address);
-                } else if (place && place.name) {
+                } else if (place?.name) {
                   setAddress(place.name);
                 }
               }}
-              onInput={(e) => {
+              onInput={() => {
                 clearErrors("location");
               }}
               options={{

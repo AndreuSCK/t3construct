@@ -1,4 +1,4 @@
-import { SignInButton, SignOutButton, currentUser } from "@clerk/nextjs";
+import { SignOutButton, currentUser } from "@clerk/nextjs";
 import Link from "next/link";
 
 export const Topbar = async () => {

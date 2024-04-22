@@ -4,7 +4,6 @@ import formatDateFromNow from "../_utils/formatDate";
 import type { inferRouterOutputs } from "@trpc/server";
 import { type jobRouter } from "~/server/api/routers/job";
 import { FirstLetterUppercase } from "../_utils/firstLetterUppercase";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 type RouterOutput = inferRouterOutputs<typeof jobRouter>;
 

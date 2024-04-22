@@ -7,7 +7,6 @@ import formatDateFromNow from "~/app/_utils/formatDate";
 import { OptionsIcon } from "../icons/options";
 import { useState } from "react";
 import { ModifyJob } from "./modifyJob";
-import { useRouter } from "next/navigation";
 type RouterOutput = inferRouterOutputs<typeof companyRouter>;
 
 export const CurrentJobList = ({

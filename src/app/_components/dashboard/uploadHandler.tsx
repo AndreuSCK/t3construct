@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
 import { UploadButton } from "~/utils/uploadthing";
 
@@ -27,7 +28,7 @@ export const UploadHandler = ({
           setError(undefined);
           setImage(undefined);
         }}
-        onUploadProgress={(progress) => {
+        onUploadProgress={() => {
           return "Uploading...";
         }}
         endpoint="imageUploader"
@@ -37,7 +38,7 @@ export const UploadHandler = ({
             setImage(res[0]?.url);
           }
         }}
-        onUploadError={(error: Error) => {
+        onUploadError={() => {
           setError("Server error or file too large. Please try again.");
         }}
         content={{
@@ -53,7 +54,7 @@ export const UploadHandler = ({
         }}
       />
       {error && <p className="text-red-600">{error}</p>}
-      {image && <img src={image} className="mt-2 h-40" />}
+      {image && <img alt="company image" src={image} className="mt-2 h-40" />}
     </div>
   );
 };

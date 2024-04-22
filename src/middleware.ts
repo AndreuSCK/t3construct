@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 // for more information about configuring your Middleware
 export default authMiddleware({
   publicRoutes: ["((?!^/dashboard).*)"],
-  afterAuth(auth, req, evt) {
+  afterAuth(auth, req) {
     const home = new URL("/", req.url);
     if (!auth.userId && !auth.isPublicRoute) {
       return NextResponse.redirect(home);

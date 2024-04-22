@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/navigation";
 import { FirstLetterUppercase } from "~/app/_utils/firstLetterUppercase";
 import { api } from "~/trpc/react";
@@ -11,7 +12,6 @@ type RouterOutput = inferRouterOutputs<typeof companyRouter>;
 export const CompanyList = ({
   companies,
   isListOpen,
-  isCreateOpen,
   isModifyOpen,
   setIsListOpen,
   setIsModifyOpen,
@@ -33,7 +33,7 @@ export const CompanyList = ({
       setIsListOpen(false);
       console.log("Company changed successfully");
     },
-    onError: (error, variables, context) => {
+    onError: (error) => {
       console.error("Error changing company", error);
     },
   });

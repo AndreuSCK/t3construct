@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import Autocomplete from "react-google-autocomplete";
 import { Suspense, useEffect, useState } from "react";
 import { UploadHandler } from "./uploadHandler";
@@ -21,7 +25,6 @@ type Inputs = {
 export const ModifyCompany = ({
   setIsModifyOpen,
   currentCompany,
-  refreshHandler,
 }: {
   setIsModifyOpen: (value: boolean) => void;
   currentCompany: RouterOutput["getUserCompanies"][number];
@@ -56,7 +59,7 @@ export const ModifyCompany = ({
       reset();
       setImage(undefined);
     },
-    onError(error, variables, context) {
+    onError(error) {
       console.error("Error creating company", error);
       setError("root.serverError", {
         message: error.message,
@@ -97,7 +100,7 @@ export const ModifyCompany = ({
   return (
     <div className="relative flex h-auto w-full  flex-col items-center justify-center rounded-xl border bg-white/90 px-12 py-3 shadow ">
       <div
-        onClick={(e) => {
+        onClick={() => {
           setIsModifyOpen(false);
         }}
         className=" absolute right-[15px] top-[5px] cursor-pointer text-2xl transition duration-100"
@@ -162,9 +165,9 @@ export const ModifyCompany = ({
             className="w-full rounded border px-3 py-1 shadow"
             apiKey={googleApi}
             onPlaceSelected={(place) => {
-              if (place && place.formatted_address) {
+              if (place?.formatted_address) {
                 setAddress(place.formatted_address);
-              } else if (place && place.name) {
+              } else if (place?.name) {
                 setAddress(place.name);
               }
             }}

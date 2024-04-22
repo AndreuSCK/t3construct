@@ -1,17 +1,19 @@
 import { authMiddleware } from "@clerk/nextjs";
+import { NextResponse } from "next/server";
 
 // See https://clerk.com/docs/references/nextjs/auth-middleware
 // for more information about configuring your Middleware
 export default authMiddleware({
-  // Allow signed out users to access the specified routes:
-  publicRoutes: ["/", "/api/webhooks(.*)"],
-
-  // Redirect signed out users to the sign in page:
-  // signInRoute: '/sign-in',
-  // Redirect signed in users to the specified route:
-  // signedInRoute: '/dashboard',
-  // ignoredRoutes:["/api/(.*)"]
-  // ignoredRoutes:[""]
+  publicRoutes: ["((?!^/dashboard).*)"],
+  afterAuth(auth, req, evt) {
+    const home = new URL("/", req.url);
+    if (!auth.userId && !auth.isPublicRoute) {
+      return NextResponse.redirect(home);
+    }
+    if (auth.userId && req.nextUrl.pathname === "/login") {
+      return NextResponse.redirect(home);
+    }
+  },
 });
 
 export const config = {

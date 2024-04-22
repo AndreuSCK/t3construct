@@ -1,8 +1,26 @@
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 export const userRouter = createTRPCRouter({
+  getMainCompany: protectedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.db.user.findFirst({
+      where: {
+        clerkId: ctx.auth.userId,
+      },
+      select: {
+        mainCompanyId: true,
+      },
+    });
+    if (!user) {
+      return null;
+    }
+    return user.mainCompanyId;
+  }),
   queryUser: publicProcedure
     .input(
       z.object({
@@ -26,7 +44,6 @@ export const userRouter = createTRPCRouter({
       return ctx.db.user.create({
         data: {
           clerkId: input.clerkId,
-          
         },
       });
     }),
@@ -44,7 +61,9 @@ export const userRouter = createTRPCRouter({
       });
     }),
 
-    deleteUser: publicProcedure.input(z.object({ id: z.string().min(1) })).mutation(async ({ ctx, input }) => {
+  deleteUser: publicProcedure
+    .input(z.object({ id: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
       return ctx.db.user.delete({
         where: {
           id: input.id,

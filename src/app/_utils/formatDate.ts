@@ -1,4 +1,4 @@
-const formatDate = (date: Date): string => {
+const formatDateFromNow = (date: Date): string => {
   const now = new Date();
   const diff = now.getTime() - date.getTime();
   const seconds = Math.floor(diff / 1000);
@@ -19,4 +19,5 @@ const formatDate = (date: Date): string => {
     return `${seconds} second${seconds > 1 ? "s" : ""} ago`;
   }
 };
-export default formatDate;
+
+export default formatDateFromNow;

@@ -69,9 +69,14 @@ export const ModifyJob = ({
       location: job.location ?? undefined,
       jobUrl: job.jobUrl ?? undefined,
     });
+    if (job.location) {
+      setAddress(job.location);
+    }
   };
   const deleteJob = api.job.deleteJob.useMutation({
     onSuccess: () => {
+      refetchJobs();
+      setModifyJob(null);
       router.refresh();
     },
   });
@@ -115,7 +120,7 @@ export const ModifyJob = ({
               {errors.title.message}
             </p>
           )}
-          <label
+         <label
             className="block text-sm font-bold text-black "
             htmlFor="description"
           >
@@ -154,6 +159,7 @@ export const ModifyJob = ({
               onInput={() => {
                 clearErrors("location");
               }}
+              defaultValue={address}
               options={{
                 componentRestrictions: { country: ["es"] },
               }}

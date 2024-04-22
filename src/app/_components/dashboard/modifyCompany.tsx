@@ -89,7 +89,11 @@ export const ModifyCompany = ({
     if (company.imageUrl) {
       setImage(company.imageUrl);
     }
+    if (company.location) {
+      setAddress(company.location);
+    }
   };
+  console.log(currentCompany)
   useEffect(() => {
     populateForm(currentCompany);
   }, [currentCompany]);
@@ -172,7 +176,7 @@ export const ModifyCompany = ({
               }
             }}
             placeholder="Enter company location"
-            defaultValue={currentCompany.location}
+            defaultValue={address}
             options={{
               componentRestrictions: { country: ["es"] },
             }}
@@ -204,21 +208,6 @@ export const ModifyCompany = ({
           </p>
         )}
 
-        <div className="relative flex w-full justify-center">
-          <label className="text-sm font-bold text-black ">Description</label>
-          <p className="absolute  right-0 text-sm">optional</p>
-        </div>
-        {errors?.description?.message && (
-          <p className="text-center text-sm italic text-red-500">
-            {errors.description.message}
-          </p>
-        )}
-        <textarea
-          id="description"
-          className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-          placeholder="Enter company description"
-          {...register("description")}
-        />
         <UploadHandler setImage={setImage} image={image} />
         <input
           className="focus:shadow-outline cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white shadow hover:bg-blue-700 focus:outline-none"
